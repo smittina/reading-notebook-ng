@@ -1,0 +1,29 @@
+<h2>{{ chipConfig().title }}</h2>
+<mat-form-field>
+  <mat-chip-grid #chipGrid aria-label="Entrez un nouveau {{chipConfig().label}}">
+    @for(config of configs(); track config) {
+      <mat-chip-row
+        (removed)="remove(config)"
+        [editable]="true"
+        (edited)="edit(config, $event)"
+        [aria-description]="'Appuyez sur Entrer pour éditer'"
+      >
+        <button matChipEdit [attr.aria-label]="'edite '+ config">
+          <mat-icon>edit</mat-icon>
+        </button>
+        {{ config.name }}
+        <button matChipRemove [attr.aria-label]="'Supprimez '+config">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    }
+    <input
+      placeholder="{{ chipConfig().placeholder }}"
+      [matChipInputFor]="chipGrid"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="addOnBlur"
+      (matChipInputTokenEnd)="add($event)"
+    />
+  </mat-chip-grid>
+</mat-form-field>
+
