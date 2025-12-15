@@ -15,6 +15,9 @@ export class ConfigComponent implements OnInit {
   loading$!: Observable<boolean>;
   configuration$!: Observable<Configuration>;
 
+  updatedGenres!: string[];
+  updatedTropes!: string[];
+
   ngOnInit() {
     this.initObservables();
     this.configurationsService.getConfigFromServer();
@@ -23,5 +26,17 @@ export class ConfigComponent implements OnInit {
   private initObservables(): void {
     this.loading$ = this.configurationsService.loading$;
     this.configuration$ = this.configurationsService.configs$;
+  }
+
+  protected onSaveConfiguration() {
+    this.configurationsService.updateConfigs({genres: this.updatedGenres, tropes: this.updatedTropes});
+  }
+
+  protected onSaveGenres(genres: string[]) {
+    this.updatedGenres = [...genres];
+  }
+
+  protected onSaveTropes(tropes: string[]) {
+    this.updatedTropes = [...tropes];
   }
 }

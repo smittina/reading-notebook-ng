@@ -7,10 +7,13 @@
     <app-config-item
       [chipConfig]="{title: 'Mes Genres Litteraires', placeholder: 'Nouveau genre', label: 'genre'}"
       [configsFromServer]="configs.genres"
+      (updatedConfigs)="onSaveGenres($event)"
     />
     <app-config-item
       [chipConfig]="{title: 'Mes Tropes Litteraires', placeholder: 'Nouveau trope', label: 'trope'}"
       [configsFromServer]="configs.tropes"
+      (updatedConfigs)="onSaveTropes($event)"
     />
+    <button mat-flat-button color="primary" (click)="onSaveConfiguration()"> Sauvegarder </button>
   </div>
 }

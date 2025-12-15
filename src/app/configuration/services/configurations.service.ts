@@ -34,4 +34,14 @@ export class ConfigurationsService {
       })
     ).subscribe();
   }
+
+  updateConfigs(configs: Configuration): void {
+    this.setLoadingStatus(true);
+    this.http.post<Configuration>(`${environment.apiUrl}/config/update`, configs).pipe(
+      tap(configs => {
+        this._configs$.next(configs);
+        this.setLoadingStatus(false);
+      })
+    ).subscribe();
+  }
 }
