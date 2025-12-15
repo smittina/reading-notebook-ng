@@ -1,5 +1,16 @@
-<div class="configuration-container">
-  <h1>Configurations : </h1>
-<app-config-item [chipConfig]="{title: 'Mes Genres Litteraires', placeholder: 'Nouveau genre', label: 'genre'}" />
-<app-config-item [chipConfig]="{title: 'Mes Tropes Litteraires', placeholder: 'Nouveau trope', label: 'trope'}" />
-</div>
+@if (loading$ | async) {
+  <mat-spinner />
+}
+@if (configuration$ | async; as configs) {
+  <div class="configuration-container">
+    <h1>Configurations : </h1>
+    <app-config-item
+      [chipConfig]="{title: 'Mes Genres Litteraires', placeholder: 'Nouveau genre', label: 'genre'}"
+      [configsFromServer]="configs.genres"
+    />
+    <app-config-item
+      [chipConfig]="{title: 'Mes Tropes Litteraires', placeholder: 'Nouveau trope', label: 'trope'}"
+      [configsFromServer]="configs.tropes"
+    />
+  </div>
+}

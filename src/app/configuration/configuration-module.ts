@@ -4,6 +4,7 @@ import { ConfigComponent } from './components/config/config.component';
 import {ConfigurationRoutingModule} from './configuration-routing-module';
 import {SharedModule} from '../shared/shared-module';
 import { ConfigItemComponent } from './components/config-item/config-item.component';
+import {ConfigurationsService} from './services/configurations.service';
 
 
 
@@ -16,6 +17,9 @@ import { ConfigItemComponent } from './components/config-item/config-item.compon
     CommonModule,
     ConfigurationRoutingModule,
     SharedModule,
+  ],
+  providers: [
+    ConfigurationsService,
   ]
 })
 export class ConfigurationModule { }

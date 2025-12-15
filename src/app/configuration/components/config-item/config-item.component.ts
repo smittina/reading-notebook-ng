@@ -1,7 +1,6 @@
-import {Component, inject, input, OnInit, signal} from '@angular/core';
+import {Component, inject, input, linkedSignal} from '@angular/core';
 import {MatChipEditedEvent, MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Config} from '../../models/config.model';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {ChipConfig} from '../../models/chip-config.model';
 
@@ -19,33 +18,36 @@ export class ConfigItemComponent {
   readonly announcer = inject(LiveAnnouncer);
 
   chipConfig = input.required<ChipConfig>();
+  configsFromServer = input.required<string[]>();
 
-  configs = signal<Config[]>([]);
+  configs = linkedSignal(() => this.configsFromServer());
 
   protected add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
     // Add Genre
     if (value) {
-      this.configs.update(configs => [...configs, {name: value}]);
+      this.configs.update(configs => {
+        return [...configs, value];
+      });
     }
     // Clear input value
     event.chipInput!.clear();
   }
 
-  protected remove(config: Config): void {
+  protected remove(config: string): void {
     this.configs.update(configs => {
       const index = configs.indexOf(config);
       if (index < 0) {
         return configs;
       }
       configs.splice(index, 1);
-      this.announcer.announce(`${config.name} a été supprimé`);
+      this.announcer.announce(`${config} a été supprimé`);
       return [...configs];
     });
   }
 
-  protected edit(config: Config, event: MatChipEditedEvent): void {
+  protected edit(config: string, event: MatChipEditedEvent): void {
     const value = event.value.trim();
 
     // Remove genre if he has no longer name
@@ -58,7 +60,7 @@ export class ConfigItemComponent {
     this.configs.update(configs => {
       const index = configs.indexOf(config);
       if (index > 0) {
-        configs[index].name = value;
+        configs[index] = value;
         return [...configs];
       }
       return configs;
