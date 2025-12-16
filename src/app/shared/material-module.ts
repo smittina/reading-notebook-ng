@@ -5,16 +5,19 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   exports: [
-    MatChipsModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatToolbarModule,
-    MatProgressSpinnerModule,
-    MatIconModule,
     MatButtonModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatToolbarModule,
   ]
 })
 export class MaterialModule { }

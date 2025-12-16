@@ -1,1 +1,17 @@
-<p>reading-list.component works!</p>
+<div class="readings-container">
+  <h1>Mes Lectures</h1>
+  @if (loading$ | async) {
+    <mat-spinner />
+  }
+  <div class="current-year-container">
+    <mat-tab-group>
+      @if(allReadings$ | async; as readings) {
+        @for( reading of readings; track reading.year) {
+          <mat-tab label="{{ reading.year }} ({{ reading.books.length}})">
+            <app-reading-list-item [books]="reading.books"/>
+          </mat-tab>
+        }
+      }
+    </mat-tab-group>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<mat-list>
+  @for(book of books(); track book.readingId) {
+    <a mat-list-item [routerLink]="book.readingId.toString()">
+      <div matListItemTitle> {{ book.bookTitle }}</div>
+      <div matListItemLine> {{ book.bookAuthor }}</div>
+      <mat-icon matListItemIcon>menu_book</mat-icon>
+    </a>
+  }
+</mat-list>
