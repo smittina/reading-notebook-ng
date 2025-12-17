@@ -6,6 +6,8 @@ import {ReadingsService} from './services/readings.service';
 import {SharedModule} from '../shared/shared-module';
 import { ReadingListItemComponent } from './components/reading-list-item/reading-list-item.component';
 import { ReadingDetailComponent } from './components/reading-detail/reading-detail.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatLine} from '@angular/material/core';
 
 
 
@@ -19,6 +21,8 @@ import { ReadingDetailComponent } from './components/reading-detail/reading-deta
     CommonModule,
     ReadingsRoutingModule,
     SharedModule,
+    ReactiveFormsModule,
+    MatLine,
   ],
   providers: [
     ReadingsService

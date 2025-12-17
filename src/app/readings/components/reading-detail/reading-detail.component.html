@@ -1,1 +1,98 @@
-<p>reading-detail.component works!</p>
+@if (loading$ | async) {
+  <mat-spinner />
+}
+@if (readingDetail$ | async; as detail) {
+  <mat-card class="detail-card">
+    <mat-card-header>
+      <mat-card-title><h1>{{ detail.title }}</h1></mat-card-title>
+      <mat-card-subtitle><h2>de {{ detail.authorName}}</h2></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="detail-content">
+        <mat-divider />
+        <h3>Informations sur la lecture</h3>
+        <mat-chip-set>
+          <mat-chip><u>Format</u> : {{ detail.typeOfReading | uppercase }}</mat-chip>
+          <mat-chip><u>Statut</u> : {{ detail.status | uppercase }}</mat-chip>
+          <mat-chip><u>Débutée le</u> : {{ detail.starting | date: 'd MMM y' }}</mat-chip>
+          @if (detail.status === StatusType.FINISHED) {
+            <mat-chip><u>Terminée le</u> : {{ detail.finished | date: 'd MMM y' }}</mat-chip>
+            <mat-chip>{{getRating(detail.rating)}}</mat-chip>
+          }
+        </mat-chip-set>
+        @if (detail.status !== StatusType.FINISHED) {
+          <div class="detail-progress">
+            <h4>{{getReadingProgression(detail.currentPage, detail.pageNumber)}} % </h4>
+            <mat-progress-bar
+              mode="determinate"
+              value="{{getReadingProgression(detail.currentPage, detail.pageNumber)}}"
+            ></mat-progress-bar>
+            <p>
+              <small>({{ detail.currentPage }} pages lues sur {{ detail.pageNumber }})</small>
+            </p>
+          </div>
+        }
+        <br />
+        <mat-divider />
+        <h3>Synopsis</h3>
+        <div>{{ detail.synopsis }}</div>
+        <br />
+        <mat-divider />
+        <h3>Informations litteraires</h3>
+        <mat-grid-list cols="2" rowHeight="2:1">
+          <mat-grid-tile>
+            <div class="detail-grid-tile">
+              <h4>Genres :</h4>
+              <mat-chip-set>
+                @for ( genre of detail.genres; track genre) {
+                  <mat-chip>{{ genre }}</mat-chip>
+                }
+              </mat-chip-set>
+              <h4>Tropes :</h4>
+              <mat-chip-set>
+                @for ( trope of detail.tropes; track trope) {
+                  <mat-chip>{{ trope }}</mat-chip>
+                }
+              </mat-chip-set>
+              <h4>Nombre de pages :</h4>
+              <mat-chip-set>
+                <mat-chip>{{ detail.pageNumber }}</mat-chip>
+              </mat-chip-set>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <div>
+              <h4>Saga :</h4>
+              <mat-slide-toggle
+                [checked]="detail.saga"
+                [disabled]="true"
+              >
+                @if(detail.saga) {
+                  Oui
+                } @else {
+                  Non
+                }
+              </mat-slide-toggle>
+              @if (detail.saga) {
+                <h4>Tous les tomes sont publiés :
+                  <mat-chip-set>
+                    @if (detail.allTomePublished) {
+                      <mat-chip>Oui</mat-chip>
+                    } @else {
+                      <mat-chip>Non</mat-chip>
+                    }
+                  </mat-chip-set>
+                </h4>
+                <h4>Numéro de tome :
+                  <mat-chip-set>
+                    <mat-chip>{{ detail.numberOfTome }}</mat-chip>
+                  </mat-chip-set>
+                </h4>
+              }
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </mat-card-content>
+  </mat-card>
+}

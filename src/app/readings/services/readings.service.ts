@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, tap} from 'rxjs';
 import {AllReadings} from '../models/all-readings.model';
 import {environment} from '../../../environments/environment';
+import {ReadingDetail} from '../models/reading-detail.model';
+import {B} from '@angular/cdk/keycodes';
 
 @Injectable()
 export class ReadingsService {
@@ -25,6 +27,12 @@ export class ReadingsService {
     return this._allReadings$.asObservable();
   }
 
+  private _readingDetail$: BehaviorSubject<ReadingDetail> = new BehaviorSubject<ReadingDetail>(new ReadingDetail());
+
+  get readingDetail$() {
+    return this._readingDetail$.asObservable();
+  }
+
   getAllReadings(): void {
     this.setLoadingStatus(true);
     this.http.get<AllReadings[]>(`${environment.apiUrl}/all-readings`).pipe(
@@ -34,4 +42,15 @@ export class ReadingsService {
       })
     ).subscribe();
   }
+
+  getReadingDetail(id: number): void {
+    this.setLoadingStatus(true);
+    this.http.get<ReadingDetail>(`${environment.apiUrl}/readings/reading-detail/${id}`).pipe(
+      tap(reading => {
+        this._readingDetail$.next(reading);
+        this.setLoadingStatus(false);
+      })
+    ).subscribe();
+  }
+
 }

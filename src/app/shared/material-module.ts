@@ -7,15 +7,26 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatListModule} from '@angular/material/list';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCardModule} from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   exports: [
     MatButtonModule,
+    MatCardModule,
     MatChipsModule,
+    MatDividerModule,
     MatFormFieldModule,
+    MatGridListModule,
     MatIconModule,
     MatListModule,
+    MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatSlideToggleModule,
     MatTabsModule,
     MatToolbarModule,
   ]
