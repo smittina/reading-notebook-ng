@@ -13,6 +13,8 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   exports: [
@@ -29,6 +31,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatSlideToggleModule,
     MatTabsModule,
     MatToolbarModule,
+    MatButtonToggleModule,
+    MatInputModule,
+    MatSelectModule,
   ]
 })
 export class MaterialModule { }

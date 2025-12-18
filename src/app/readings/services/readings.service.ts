@@ -5,6 +5,7 @@ import {AllReadings} from '../models/all-readings.model';
 import {environment} from '../../../environments/environment';
 import {ReadingDetail} from '../models/reading-detail.model';
 import {B} from '@angular/cdk/keycodes';
+import {FormInformation} from '../models/new-reading/form-information.model';
 
 @Injectable()
 export class ReadingsService {
@@ -33,6 +34,12 @@ export class ReadingsService {
     return this._readingDetail$.asObservable();
   }
 
+  private _formInformation$: BehaviorSubject<FormInformation> = new BehaviorSubject<FormInformation>(new FormInformation());
+
+  get formInformation$() {
+    return this._formInformation$.asObservable();
+  }
+
   getAllReadings(): void {
     this.setLoadingStatus(true);
     this.http.get<AllReadings[]>(`${environment.apiUrl}/all-readings`).pipe(
@@ -48,6 +55,16 @@ export class ReadingsService {
     this.http.get<ReadingDetail>(`${environment.apiUrl}/readings/reading-detail/${id}`).pipe(
       tap(reading => {
         this._readingDetail$.next(reading);
+        this.setLoadingStatus(false);
+      })
+    ).subscribe();
+  }
+
+  getFormInformation(): void {
+    this.setLoadingStatus(true);
+    this.http.get<FormInformation>(`${environment.apiUrl}/readings/form-information`).pipe(
+      tap(formInformation => {
+        this._formInformation$.next(formInformation);
         this.setLoadingStatus(false);
       })
     ).subscribe();

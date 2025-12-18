@@ -1,1 +1,121 @@
-<p>new-reading.component works!</p>
+@if (loading$ | async) {
+  <mat-spinner />
+}
+@if (formInformation$ | async; as formInfo) {
+  <mat-card [formGroup]="mainForm" class="main-form">
+    <mat-card-header class="new-reading-title-card">
+      <mat-card-title>Ajouter une lecture</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <br />
+      <mat-divider />
+      <br />
+      <div class="new-reading-info">
+        <mat-button-toggle-group [formControl]="readingInfoCtrl">
+          <mat-button-toggle value="new-reading">Nouvelle lecture</mat-button-toggle>
+          <mat-button-toggle value="re-reading">Relecture</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </mat-card-content>
+    <mat-card class="form-card" formGroupName="bookInfo">
+      <mat-card-subtitle>Informations générales sur le livre</mat-card-subtitle>
+      <mat-card-content>
+        @if ( showNewReadingForm$ | async ) {
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Titre</mat-label>
+              <input type="text" matInput formControlName="title" >
+              <mat-error>Ce champ est requis</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Nom de l'auteur</mat-label>
+              <input type="text" matInput formControlName="authorName">
+              <mat-error>Ce champ est requis</mat-error>
+            </mat-form-field>
+          </div>
+        }
+        @if ( showReReadingForm$ | async ) {
+          <p>Relecture</p>
+        }
+        <div class="form-row">
+          <mat-form-field>
+            <textarea matInput placeholder="Entrez le synopsis du livre" formControlName="synopsis"></textarea>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Nombre de pages</mat-label>
+            <input type="number" matInput formControlName="pageNumber">
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field>
+            <mat-label>Genres</mat-label>
+            <mat-select [formControl]="genresCtrl" multiple>
+              @for (genre of formInfo.genres; track genre) {
+                <mat-option [value]="genre">{{ genre }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Tropes</mat-label>
+            <mat-select [formControl]="tropesCtrl" multiple>
+              @for (trope of formInfo.tropes; track trope) {
+                <mat-option [value]="trope">{{ trope }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="form-card" formGroupName="sagaInfo">
+      <mat-card-subtitle>Univers</mat-card-subtitle>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-label>Est-ce qu'il s'agit d'une saga ?</mat-label>
+          <mat-button-toggle-group [formControl]="sagaCtrl">
+            <mat-button-toggle value="true">Oui</mat-button-toggle>
+            <mat-button-toggle value="false">Non</mat-button-toggle>
+          </mat-button-toggle-group>
+          </div>
+        @if (showSagaForm$ | async ) {
+          <div class="form-row">
+            <mat-label>Est-ce que tous les tomes de cette saga ont été publiés ?</mat-label>
+            <mat-button-toggle-group [formControl]="allTomePublishedCtrl">
+              <mat-button-toggle value="true">Oui</mat-button-toggle>
+              <mat-button-toggle value="false">Non</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Numéro du tome</mat-label>
+              <input type="number" matInput formControlName="numberOfTome">
+            </mat-form-field>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="form-card" formGroupName="readingInfo">
+      <mat-card-subtitle>Lecture</mat-card-subtitle>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field>
+            <mat-label>Type de lecture</mat-label>
+            <mat-select [formControl]="typeOfReadingCtrl">
+              <mat-option [value]="ReadingType.HARDBACK">{{ ReadingType.HARDBACK | uppercase }}</mat-option>
+              <mat-option [value]="ReadingType.PAPERBACK">{{ ReadingType.PAPERBACK | uppercase }}</mat-option>
+              <mat-option [value]="ReadingType.AUDIO">{{ ReadingType.AUDIO | uppercase }}</mat-option>
+              <mat-option [value]="ReadingType.EBOOK">{{ ReadingType.EBOOK | uppercase }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Statut de lecture</mat-label>
+            <mat-select [formControl]="statusCtrl">
+              <mat-option [value]="StatusType.IN_PROGRESS">{{ StatusType.IN_PROGRESS | uppercase }}</mat-option>
+              <mat-option [value]="StatusType.FINISHED">{{ StatusType.FINISHED | uppercase }}</mat-option>
+              <mat-option [value]="StatusType.DNF">{{ StatusType.DNF | uppercase }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-card>
+}
