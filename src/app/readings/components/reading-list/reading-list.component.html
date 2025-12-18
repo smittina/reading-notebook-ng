@@ -1,5 +1,6 @@
 <div class="readings-container">
   <h1>Mes Lectures</h1>
+  <button matButton="filled" (click)="onAddNewReading()">Ajouter une nouvelle lecture</button>
   @if (loading$ | async) {
     <mat-spinner />
   }

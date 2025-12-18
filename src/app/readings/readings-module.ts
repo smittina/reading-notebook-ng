@@ -8,6 +8,7 @@ import { ReadingListItemComponent } from './components/reading-list-item/reading
 import { ReadingDetailComponent } from './components/reading-detail/reading-detail.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatLine} from '@angular/material/core';
+import { NewReadingComponent } from './components/new-reading/new-reading.component';
 
 
 
@@ -15,7 +16,8 @@ import {MatLine} from '@angular/material/core';
   declarations: [
     ReadingListComponent,
     ReadingListItemComponent,
-    ReadingDetailComponent
+    ReadingDetailComponent,
+    NewReadingComponent
   ],
   imports: [
     CommonModule,

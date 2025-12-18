@@ -1,13 +1,11 @@
-.readings-container-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 500px;
-}
-
 .readings-container h1 {
   text-align: center;
   margin-bottom: 50px;
+}
+
+.readings-container button {
+  margin-top: 20px;
+  margin-left: 50px;
 }
 
 .current-year-container {
