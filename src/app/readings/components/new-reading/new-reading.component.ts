@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {map, Observable, startWith} from 'rxjs';
+import {map, Observable, startWith, tap} from 'rxjs';
 import {FormInformation} from '../../models/new-reading/form-information.model';
 import {ReadingsService} from '../../services/readings.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -38,6 +38,8 @@ export class NewReadingComponent implements OnInit {
   showNewReadingForm$!: Observable<boolean>;
   showReReadingForm$!: Observable<boolean>;
   showSagaForm$!: Observable<boolean>;
+  showFinishedBookForm$!: Observable<boolean>;
+
 
   ngOnInit() {
     this.initServiceObservables();
@@ -47,12 +49,12 @@ export class NewReadingComponent implements OnInit {
     this.initFormObservables();
   }
 
-  private initServiceObservables() {
+  private initServiceObservables(): void {
     this.loading$ = this.readingsService.loading$;
     this.formInformation$ = this.readingsService.formInformation$
   }
 
-  private initFormControls() {
+  private initFormControls(): void {
     this.readingInfoCtrl = this.formBuilder.control('new-reading');
 
     this.genresCtrl = this.formBuilder.control('');
@@ -63,7 +65,7 @@ export class NewReadingComponent implements OnInit {
       synopsis: [''],
       genres: this.genresCtrl,
       tropes: this.tropesCtrl,
-      pageNumber: [''],
+      pageNumber: ['0'],
     });
 
     this.sagaCtrl = this.formBuilder.control('false', Validators.required);
@@ -80,9 +82,9 @@ export class NewReadingComponent implements OnInit {
       typeOfReading: this.typeOfReadingCtrl,
       status: this.statusCtrl,
       starting: ['', Validators.required],
-      finished: [''],
-      currentPage: [''],
-      rating: [''],
+      finished: ['', Validators.required],
+      currentPage: ['0'],
+      rating: ['-1'],
     })
   }
 
@@ -95,7 +97,7 @@ export class NewReadingComponent implements OnInit {
     })
   }
 
-  private initFormObservables() {
+  private initFormObservables(): void {
 
     this.showNewReadingForm$ = this.readingInfoCtrl.valueChanges.pipe(
       startWith(this.readingInfoCtrl.value),
@@ -108,8 +110,21 @@ export class NewReadingComponent implements OnInit {
     );
 
     this.showSagaForm$ = this.sagaCtrl.valueChanges.pipe(
-      startWith(this.readingInfoCtrl.value),
+      startWith(this.sagaCtrl.value),
       map(saga => saga === 'true'),
-    )
+    );
+
+    this.showFinishedBookForm$ = this.statusCtrl.valueChanges.pipe(
+      startWith(this.statusCtrl.value),
+      map(status => status === StatusType.FINISHED)
+    );
   }
+
+  getSliderLabel(value: number): string {
+    if (value === 5.5) {
+      return 'Coup de ❤️';
+    }
+    return `${value} ⭐`;
+  }
+
 }

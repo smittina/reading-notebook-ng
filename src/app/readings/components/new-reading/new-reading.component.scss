@@ -23,6 +23,10 @@ mat-form-field {
   }
 }
 
+mat-slider {
+  width: 50%;
+}
+
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -32,3 +36,4 @@ mat-form-field {
 .form-card {
   margin: 20px 0;
 }
+

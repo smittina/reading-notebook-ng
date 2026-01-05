@@ -51,3 +51,11 @@ a {
     color: rebeccapurple;
   }
 }
+
+:root {
+  @include mat.slider-overrides((
+    active-track-shape: 16px,
+    value-indicator-width: 50px,
+    value-indicator-height: 50px,
+  ));
+}
