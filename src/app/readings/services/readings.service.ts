@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, tap} from 'rxjs';
+import {BehaviorSubject, map, Observable, tap} from 'rxjs';
 import {AllReadings} from '../models/all-readings.model';
 import {environment} from '../../../environments/environment';
 import {ReadingDetail} from '../models/reading-detail.model';
 import {B} from '@angular/cdk/keycodes';
 import {FormInformation} from '../models/new-reading/form-information.model';
+import {ExistentBook} from '../models/new-reading/existent-book.model';
+import {ExistentAuthor} from '../models/new-reading/existent-author.model';
 
 @Injectable()
 export class ReadingsService {
@@ -68,6 +70,20 @@ export class ReadingsService {
         this.setLoadingStatus(false);
       })
     ).subscribe();
+  }
+
+  getBooksFromAuthorId(authorId: number): Observable<ExistentBook[]> {
+    return this._formInformation$.pipe(
+      map(formInformation => {
+        const author = formInformation.authors.find(author => author.id === authorId);
+        if (!author) {
+          return [];
+        } else {
+          return author.books;
+        }
+      }
+      ),
+    );
   }
 
 }

@@ -1,10 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {map, Observable, startWith, tap} from 'rxjs';
+import {distinctUntilChanged, map, Observable, of, startWith, switchMap, tap} from 'rxjs';
 import {FormInformation} from '../../models/new-reading/form-information.model';
 import {ReadingsService} from '../../services/readings.service';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {StatusType} from '../../enums/status-type.enum';
 import {ReadingType} from '../../enums/reading-type.enum';
+import {ExistentBook} from '../../models/new-reading/existent-book.model';
 
 @Component({
   selector: 'app-new-reading',
@@ -22,11 +23,15 @@ export class NewReadingComponent implements OnInit {
 
   loading$!: Observable<boolean>;
   formInformation$!: Observable<FormInformation>;
+  books$!: Observable<ExistentBook[]>;
+  books!: ExistentBook[];
 
   mainForm!: FormGroup;
   readingInfoCtrl!: FormControl;
   genresCtrl!: FormControl;
   tropesCtrl!: FormControl;
+  existentAuthorCtrl!: FormControl;
+  existentBookCtrl!: FormControl;
   bookInfoForm!: FormGroup;
   sagaInfoForm!: FormGroup;
   sagaCtrl!: FormControl;
@@ -51,7 +56,7 @@ export class NewReadingComponent implements OnInit {
 
   private initServiceObservables(): void {
     this.loading$ = this.readingsService.loading$;
-    this.formInformation$ = this.readingsService.formInformation$
+    this.formInformation$ = this.readingsService.formInformation$;
   }
 
   private initFormControls(): void {
@@ -59,9 +64,13 @@ export class NewReadingComponent implements OnInit {
 
     this.genresCtrl = this.formBuilder.control('');
     this.tropesCtrl = this.formBuilder.control('');
+    this.existentAuthorCtrl = this.formBuilder.control('');
+    this.existentBookCtrl = this.formBuilder.control('');
     this.bookInfoForm = this.formBuilder.group({
       title: ['', Validators.required],
       authorName: ['', Validators.required],
+      existentAuthor: this.existentAuthorCtrl,
+      existentBook: this.existentBookCtrl,
       synopsis: [''],
       genres: this.genresCtrl,
       tropes: this.tropesCtrl,
@@ -98,6 +107,17 @@ export class NewReadingComponent implements OnInit {
   }
 
   private initFormObservables(): void {
+    this.existentAuthorCtrl.valueChanges.pipe(
+      startWith(this.existentAuthorCtrl.value),
+      switchMap(authorId => {
+        this.existentBookCtrl.reset();
+        if(!authorId) {
+          return of ([]);
+        } else {
+          return this.readingsService.getBooksFromAuthorId(authorId);
+        }
+      })
+    ).subscribe(book => this.books = book);
 
     this.showNewReadingForm$ = this.readingInfoCtrl.valueChanges.pipe(
       startWith(this.readingInfoCtrl.value),
@@ -120,11 +140,14 @@ export class NewReadingComponent implements OnInit {
     );
   }
 
-  getSliderLabel(value: number): string {
+  protected getSliderLabel(value: number): string {
     if (value === 5.5) {
       return 'Coup de ❤️';
     }
     return `${value} ⭐`;
   }
 
+  protected onSubmit() {
+    console.log(this.mainForm.value);
+  }
 }
